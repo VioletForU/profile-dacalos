@@ -6,6 +6,7 @@
   --ink: #1F1A14;
   --gold: #C9A227;
   --gold-light: #E6C75A;
+  --sprite-h: 56px; /* height of the PNG horses; width follows each image's aspect ratio */
 }
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -98,7 +99,7 @@ main {
 
 .lane {
   position: relative;
-  height: 56px;
+  height: 64px;
   margin: 0 40px 0 10px;
   border-bottom: 2px dashed rgba(244,234,213,0.35);
   display: flex;
@@ -109,6 +110,7 @@ main {
 .lane-label {
   position: absolute;
   left: -2px;
+  top: 2px;
   font-size: 12px;
   color: var(--cream);
   opacity: 0.75;
@@ -119,21 +121,38 @@ main {
 }
 
 .horse {
+  --flip: -1; /* emoji face left, so they're mirrored */
   position: absolute;
   left: 4px;
   font-size: 30px;
-  transform: scaleX(-1);
+  transform: scaleX(var(--flip));
   transition: left 0.28s linear;
   filter: drop-shadow(0 2px 2px rgba(0,0,0,0.35));
   will-change: left;
+}
+
+/* PNG sprites: not mirrored by default. If your art faces left, change --flip to -1. */
+.horse.sprite {
+  --flip: 1;
+  line-height: 0;
+}
+.horse img {
+  display: block;
+  height: var(--sprite-h);
+  width: auto;
+  max-width: 96px;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .horse.winner {
   animation: bounce 0.5s ease-in-out infinite;
 }
 @keyframes bounce {
-  0%, 100% { transform: scaleX(-1) translateY(0); }
-  50% { transform: scaleX(-1) translateY(-6px); }
+  0%, 100% { transform: scaleX(var(--flip)) translateY(0); }
+  50% { transform: scaleX(var(--flip)) translateY(-6px); }
 }
 
 .controls {
@@ -195,7 +214,8 @@ button:focus-visible {
 }
 
 @media (max-width: 480px) {
+  :root { --sprite-h: 44px; }
   .horse { font-size: 24px; }
-  .lane { height: 46px; margin: 0 34px 0 6px; }
+  .lane { height: 52px; margin: 0 34px 0 6px; }
   .finish { right: 32px; width: 10px; }
 }
