@@ -13,7 +13,7 @@
   var SPRITES = Array.isArray(window.DERBY_SPRITES) ? window.DERBY_SPRITES : [];
 
   var HORSES = [
-    { name: "Horse 1,   emoji: "🐎" },
+    { name: "Horse 1",   emoji: "🐎" },
     { name: "Horse 2", emoji: "🐴" },
     { name: "Horse 3",    emoji: "🐎" },
     { name: "Horse 4",    emoji: "🐴" },
