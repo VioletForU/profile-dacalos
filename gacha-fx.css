@@ -1,0 +1,171 @@
+/* ============================================================
+   Gacha click effects — Umamusume-style tap bursts & SSR reveal
+   Pure CSS/JS, no image assets. Loaded after styles.css.
+   ============================================================ */
+
+.gfx-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ---------- Tap ring ---------- */
+.gfx-ring {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow:
+    0 0 10px 2px var(--gfx-c, #9dfa53),
+    inset 0 0 8px var(--gfx-c, #9dfa53);
+  animation: gfx-ring var(--gfx-d, 0.55s) cubic-bezier(0.2, 0.7, 0.3, 1) var(--gfx-delay, 0s) both;
+}
+
+@keyframes gfx-ring {
+  0%   { transform: scale(0.2); opacity: 1; }
+  100% { transform: scale(4.5); opacity: 0; border-width: 1px; }
+}
+
+/* ---------- Center glow on tap ---------- */
+.gfx-glow {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  margin: -45px 0 0 -45px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 240, 150, 0.6) 35%, transparent 70%);
+  animation: gfx-glow 0.4s ease-out both;
+}
+
+@keyframes gfx-glow {
+  0%   { transform: scale(0.2); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* ---------- Four-point sparkles ---------- */
+.gfx-spark {
+  position: absolute;
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  width: var(--s);
+  height: var(--s);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--s);
+  line-height: 1;
+  color: var(--c);
+  text-shadow: 0 0 6px var(--c), 0 0 12px rgba(255, 255, 255, 0.9);
+  animation: gfx-spark var(--d) cubic-bezier(0.15, 0.7, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+@keyframes gfx-spark {
+  0%   { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 1; }
+  25%  { transform: translate(calc(var(--x) * 0.55), calc(var(--y) * 0.55)) scale(1.25) rotate(60deg); opacity: 1; }
+  100% { transform: translate(var(--x), var(--y)) scale(0) rotate(200deg); opacity: 0; }
+}
+
+/* ---------- SSR reveal: rainbow flash ---------- */
+.gfx-flash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    #ff4d6d, #ffb84d, #fff34d, #5dff7a, #4dd2ff, #b34dff, #ff4dd2, #ff4d6d
+  );
+  background-size: 300% 100%;
+  animation: gfx-flash 1.2s ease-out both;
+}
+
+@keyframes gfx-flash {
+  0%   { opacity: 0;    background-position: 0% 0; }
+  12%  { opacity: 0.75; }
+  100% { opacity: 0;    background-position: 100% 0; }
+}
+
+/* ---------- SSR reveal: radiating shine lines ---------- */
+.gfx-rays {
+  position: absolute;
+  width: 220vmax;
+  height: 220vmax;
+  background: repeating-conic-gradient(
+    rgba(255, 255, 255, 0.95) 0deg 4deg,
+    rgba(255, 244, 170, 0) 4deg 14deg
+  );
+  -webkit-mask-image: radial-gradient(circle, #000 0%, transparent 55%);
+          mask-image: radial-gradient(circle, #000 0%, transparent 55%);
+  animation: gfx-rays 1.7s ease-out both;
+}
+
+@keyframes gfx-rays {
+  0%   { transform: translate(-50%, -50%) rotate(0deg)  scale(0.15); opacity: 0; }
+  15%  { opacity: 1; }
+  100% { transform: translate(-50%, -50%) rotate(45deg) scale(1);    opacity: 0; }
+}
+
+/* ---------- SSR reveal: banner ---------- */
+.gfx-banner {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--font-body, "Plus Jakarta Sans", system-ui, sans-serif);
+  font-style: italic;
+  font-weight: 900;
+  text-align: center;
+  animation: gfx-banner 1.9s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+
+.gfx-banner-main {
+  font-size: clamp(4.5rem, 16vw, 10rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: #fff8b8;
+  -webkit-text-stroke: 3px #b36e05;
+  paint-order: stroke fill;
+  text-shadow:
+    0 4px 0 #b36e05,
+    0 0 22px #ffd23b,
+    0 0 48px #ff9d00;
+}
+
+.gfx-banner-stars {
+  margin-top: 0.4rem;
+  font-size: clamp(1.4rem, 5vw, 2.6rem);
+  letter-spacing: 0.35em;
+  padding-left: 0.35em; /* balance trailing letter-spacing */
+  color: #ffe14d;
+  text-shadow: 0 2px 0 #b36e05, 0 0 14px #ffb700;
+}
+
+.gfx-banner-sub {
+  margin-top: 0.35rem;
+  padding: 0.2rem 1.1rem;
+  font-size: clamp(0.85rem, 2.6vw, 1.25rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(180deg, #8fe136, #509f06);
+  border: 2px solid #a4f849;
+  border-radius: 9999px;
+  box-shadow: 0 3px 0 #336e05;
+}
+
+@keyframes gfx-banner {
+  0%   { transform: translate(-50%, -50%) rotate(-6deg) scale(0);    opacity: 0; }
+  22%  { transform: translate(-50%, -50%) rotate(-6deg) scale(1.15); opacity: 1; }
+  32%  { transform: translate(-50%, -50%) rotate(-6deg) scale(1); }
+  78%  { transform: translate(-50%, -50%) rotate(-6deg) scale(1);    opacity: 1; }
+  100% { transform: translate(-50%, -50%) rotate(-6deg) scale(1.08); opacity: 0; }
+}
+
+/* ---------- Motion preferences ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .gfx-layer { display: none; }
+}
